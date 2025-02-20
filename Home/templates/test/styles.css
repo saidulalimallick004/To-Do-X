@@ -1,0 +1,16 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar {
+    border-bottom: 1px solid #ddd;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+.list-group-item {
+    border: none;
+    background: #f8f9fa;
+}

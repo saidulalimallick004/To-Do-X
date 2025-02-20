@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block start_main %}
+
+<div class="container mt-5">
+    <div class="row">
+
+        <!-- Left Column: Task List -->
+        <div class="col-md-7">
+            <div class="card shadow-sm p-3">
+                <h5>Today's Tasks</h5>
+                <ul id="task-list" class="list-group mb-3">
+
+                    {% for task in Live_Tasks %}
+                        <div class="accordion-item">
+                            <li class="list-group-item d-flex align-items-center accordion-header" id="heading{{task.id}}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{task.id}}" aria-expanded="false" aria-controls="collapse{{task.id}}">
+                                    <input type="checkbox" class="form-check-input me-2">
+                                    {{forloop.counter}}. {{task.name}}
+                                </button>
+                            </li>
+
+                            <div id="collapse{{task.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{task.id}}" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {{task.description}}
+                            </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                </ul>
+
+                <!-- Button trigger modal -->
+
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Add Task
+                </button>
+                
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Add New Task</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="container">
+                                    <div class="form-container">
+
+                                        <form>
+                                            <!-- Task Name -->
+                                            <div class="mb-3">
+                                                <label for="taskName" class="form-label">Task Name</label>
+                                                <input type="text" class="form-control" id="taskName" placeholder="Enter task name" required>
+                                            </div>
+                                
+                                            <!-- Task Description -->
+                                            <div class="mb-3">
+                                                <label for="taskDescription" class="form-label">Task Description</label>
+                                                <textarea class="form-control" id="taskDescription" rows="3" placeholder="Enter task details" required></textarea>
+                                            </div>
+                                
+                                            <!-- Deadline Date & Time -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="deadlineDate" class="form-label">Deadline Date</label>
+                                                    <input type="date" class="form-control" id="deadlineDate" required>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="deadlineTime" class="form-label">Deadline Time</label>
+                                                    <input type="time" class="form-control" id="deadlineTime">
+                                                </div>
+                                            </div>
+                                
+                                            <!-- Category & Priority -->
+                                            <div class="row mb-3">
+                                                <div class="col-md-6">
+                                                    <label for="taskCategory" class="form-label">Category</label>
+                                                    <select class="form-select" id="taskCategory" required>
+                                                        <option selected disabled>Choose...</option>
+                                                        <option value="Na">No</option>
+                                                        <option value="Work">Work</option>
+                                                        <option value="Personal">Personal</option>
+                                                        <option value="Study">Study</option>
+                                                        <option value="Health">Health</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="taskPriority" class="form-label">Priority</label>
+                                                    <select class="form-select" id="taskPriority" required>
+                                                        <option selected disabled>Choose...</option>
+                                                        <option value="High">High</option>
+                                                        <option value="Medium">Medium</option>
+                                                        <option value="Low">Low</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Add</button>
+                                            </div>
+                                        </form> 
+                                    </div>
+                                </div>
+                            </div>          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Stats & Categories -->
+        <div class="col-md-5">
+            <div class="card shadow-sm p-3 mb-3">
+                <h6>Statistics</h6>
+                <div class="row text-center">
+                    <div class="col">
+                        <span class="fs-4 fw-bold">{{NoOfLiveTasks}}</span>
+                        <p class="text-muted">Pending Tasks</p>
+                    </div>
+                    <div class="col">
+                        <span class="fs-4 fw-bold">{{NoOfCompletedTasks}}</span>
+                        <p class="text-muted">Completed Today</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm p-3 mb-3">
+                <h6>Upcoming Deadlines within 2 Days </h6>
+                <p class="ml-2"><strong>Project Milestone</strong> <span class="float-end">Tomorrow</span></p>
+                <p><strong>Client Presentation</strong> <span class="float-end">In 2 days</span></p>
+            </div>
+
+            <div class="card shadow-sm p-3 mb-3">
+                <h6>Categories</h6>
+                <span class="badge bg-secondary me-1 ">Work</span>
+                <span class="badge bg-secondary me-1 mt-3">Personal</span>
+                <span class="badge bg-secondary me-1 mt-3">Shopping</span>
+                <span class="badge bg-secondary mt-3">Health</span>
+            </div>
+
+            <div class="card shadow-sm p-3">
+                <h6><strong>Missed Deadlines:</strong> {{MissedTasks}}</h6>
+                <p>Website Redesign <span class="float-end text-muted">2 days ago</span></p>
+                <small class="text-danger">High Priority</small>
+                <hr>
+                <p>API Documentation <span class="float-end text-muted">1 day ago</span></p>
+                <small class="text-warning">Medium Priority</small>
+                <hr>
+                <p>Budget Report <span class="float-end text-muted">5 hours ago</span></p>
+                <small class="text-danger">High Priority</small>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+
+{% endblock start_main %}
+
+
+
+
+
+
