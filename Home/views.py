@@ -4,6 +4,10 @@ from django.shortcuts import render
 
 
 
+def login_user(request):
+    
+    return render(request, "home\login_page.html")
+
 
 def home(request):
     
@@ -24,3 +28,8 @@ def home(request):
     }
     
     return render(request, "home\index.html",context)
+
+
+
+def add_new_task(request):
+    
