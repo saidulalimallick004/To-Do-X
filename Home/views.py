@@ -11,7 +11,7 @@ def home(request):
         "Page_Title":"ToDo-X",
         "Page_Heading":"ToDo-X",
     }
-    return render(request, "home\index.html",context)
+    return render(request, "home/index.html",context)
 
 
 def signup_user(request):
@@ -91,26 +91,55 @@ def logout_user(request):
 @login_required(login_url="/login/")
 def dashboard(request):
     
-    Live_Tasks=[
-        {'id':1, 'name':'Drink Water','description': 'Drink 1L Water'},
-        {'id':2,'name':'Give water to Plants','description': 'Flowering Plant'},
-        {'id':3,'name':'Write an Application','description': 'to HOD'}
-    ]
+    if request.method=="POST":
+        data=request.POST
+        
+        TaskName=data.get("TaskName")
+        TaskDec=data.get("TaskDec")
+        
+        DeadLine=data.get("DeadLine")
+        DeadTime=data.get("DeadTime")
+        
+        Category=data.get("Category")
+        Priority=data.get("Label")
+        
+        
+        task=Task_Table.objects.create(
+            user=request.user,
+            TaskName=TaskName,
+            TaskDescription=TaskDec,
+            
+            TaskCategory=Category,
+            Label=Priority,
+            
+            DeadlineDate=DeadLine,
+            DeadlineTime=DeadTime,
+        )
+        
+        task.save()
+        messages.info(request, "Task Created")
+        
+        return redirect('/dashboard/')
+           
+    
+    Live_Tasks=Task_Table.objects.filter(user=request.user)
     
     context={
         "Page_Title":"ToDo-X",
         "Page_Heading":"ToDo-X",
         "Live_Tasks": Live_Tasks,
-        "NoOfLiveTasks": 10,
+        "NoOfLiveTasks": len(Live_Tasks),
         "NoOfCompletedTasks":1,
         "MissedTasks":11
-        
     }
     
-    return render(request, "home\dashboard.html",context)
+    return render(request, "home/dashboard.html",context)
 
 
 
-def add_new_task(request):
-    if request.method=="POST":
-        print("try to add task")
+def task_done(request,id):
+    m=f"Task {id} Complete!!"
+    
+    messages.info(request, m)
+    return redirect("/dashboard/")
+    
