@@ -23,7 +23,18 @@ urlpatterns = [
     
     #---------------------------------------------------------------------------------------
     
-    path('',home,name='Home')
+    path('',home,name='Home'),
+    path('home/',home,name='Home'),
+    
+    #---------------------------------------------------------------------------------------
+    
+    path('signup/',signup_user, name="Sign-Up"),
+    path('login/',login_user, name="Login"),
+    path('logout/',logout_user, name="Logout"),
+    
+    
+    
+    path('dashboard/',dashboard,name='Dashboard')
     
     
 ]
