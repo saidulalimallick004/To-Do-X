@@ -121,15 +121,16 @@ def dashboard(request):
         
         return redirect('/dashboard/')
            
-    
-    Live_Tasks=Task_Table.objects.filter(user=request.user)
+    Live_Task=Task_Table.objects.filter(user=request.user)
+    CompletedTask=Task_Table.objects.filter(user=request.user,IsComplete=1)
+    NoOfPendingTasks=Task_Table.objects.filter(user=request.user,IsComplete=0)
     
     context={
         "Page_Title":"ToDo-X",
         "Page_Heading":"ToDo-X",
-        "Live_Tasks": Live_Tasks,
-        "NoOfLiveTasks": len(Live_Tasks),
-        "NoOfCompletedTasks":1,
+        "Live_Tasks": Live_Task,
+        "NoOfPendingTasks":len(NoOfPendingTasks),
+        "NoOfCompletedTasks": len(CompletedTask),
         "MissedTasks":11
     }
     
