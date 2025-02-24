@@ -5,8 +5,14 @@
     <section class="hero">
         <h1>Welcome to To Do X</h1>
         <p>Organize your tasks, boost productivity, and never miss a deadline!</p>
+
+        {% if user.is_authenticated %}
+        <a class="btn btn-light btn-lg btn-custom" href="/dashboard/"> Dashboard</a>
+        {%else%}
         <a href="/login/" class="btn btn-light btn-lg btn-custom">Login</a>
         <a href="/signup/" class="btn btn-outline-light btn-lg btn-custom">Sign Up</a>
+        {% endif %}
+
     </section>
 
     <!-- Why Choose Us -->

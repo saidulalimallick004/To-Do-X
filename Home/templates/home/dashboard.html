@@ -15,8 +15,14 @@
                         <div class="accordion-item">
                             <li class="list-group-item d-flex align-items-center accordion-header" id="heading{{task.id}}">
                                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{task.id}}" aria-expanded="false" aria-controls="collapse{{task.id}}">
-                                    <input type="checkbox" class="form-check-input me-2">
-                                    {{forloop.counter}}. {{task.TaskName}}
+                                    {% if task.IsComplete == 1 %}
+                                        <input type="checkbox" value="yes" checked class="form-check-input me-2">
+                                        <p class="text-decoration-line-through">{{forloop.counter}}. {{task.TaskName}}</p>
+                                    {% else %}
+                                        <input type="checkbox" class="form-check-input me-2">
+                                        <p>{{forloop.counter}}. {{task.TaskName}}</p>
+                                    {% endif %}
+
                                 </button>
                                 <a href="/completeTask/{{task.id}}">Complete</a>
                             </li>
@@ -71,7 +77,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label for="deadlineTime" class="form-label">Deadline Time</label>
-                                                    <input name="DeadTime" type="time" class="form-control" id="deadlineTime" required>
+                                                    <input name="DeadTime" value="23:59" type="time" class="form-control" id="deadlineTime" required>
                                                 </div>
                                             </div>
                                 
@@ -119,19 +125,19 @@
                 <div class="row text-center">
                     <div class="col">
                         <span class="fs-4 fw-bold">{{NoOfLiveTasks}}</span>
-                        <p class="text-muted">Pending Tasks</p>
+                        <p class="text-muted">Total Tasks</p>
                     </div>
                     <div class="col">
-                        <span class="fs-4 fw-bold">{{NoOfCompletedTasks}}</span>
+                        <span class="fs-4 fw-bold">Add This Feature Soon</span>
                         <p class="text-muted">Completed Today</p>
                     </div>
                 </div>
             </div>
 
             <div class="card shadow-sm p-3 mb-3">
-                <h6>Upcoming Deadlines within 2 Days </h6>
-                <p class="ml-2"><strong>Project Milestone</strong> <span class="float-end">Tomorrow</span></p>
-                <p><strong>Client Presentation</strong> <span class="float-end">In 2 days</span></p>
+                <h6>Upcoming Deadlines within 2 Days : Add this Feature Soon </h6>
+                <p class="ml-2"><strong></strong>---<span class="float-end">---</span></p>
+                <p><strong>----</strong> <span class="float-end">---</span></p>
             </div>
 
             <div class="card shadow-sm p-3 mb-3">

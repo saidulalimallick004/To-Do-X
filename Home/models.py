@@ -20,7 +20,9 @@ class Task_Table(models.Model):
     Label=models.CharField(max_length=25,null=True,blank=True)
     
     DeadlineDate=models.DateField()
-    DeadlineTime=models.TimeField(default=time(23, 59))
+    DeadlineTime=models.TimeField()
+    
+    ComplateDateTime=models.DateField(null=True,blank=True)
     
     def __str__(self) -> str:
         return self.TaskName

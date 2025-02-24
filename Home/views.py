@@ -138,6 +138,9 @@ def dashboard(request):
 
 
 def task_done(request,id):
+    
+    task=Task_Table.objects.filter(id=id).update(IsComplete=True)
+    
     m=f"Task {id} Complete!!"
     
     messages.info(request, m)
