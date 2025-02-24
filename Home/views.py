@@ -27,7 +27,6 @@ def signup_user(request):
         Username=data.get("username")
         Email=data.get("email")
         Password=data.get("confirm_password")
-        print(f" 1.{First_Name} {Last_Name}\n{Username}\n{Email}\n{Password}\n\n")
         
         if User.objects.filter(username=Username).exists():
             messages.info(request, "Username already taken!!")
