@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
+
+from datetime import datetime
 # Create your views here.
 
 
@@ -95,13 +97,10 @@ def dashboard(request):
         
         TaskName=data.get("TaskName")
         TaskDec=data.get("TaskDec")
-        
         DeadLine=data.get("DeadLine")
         DeadTime=data.get("DeadTime")
-        
         Category=data.get("Category")
         Priority=data.get("Label")
-        
         
         task=Task_Table.objects.create(
             user=request.user,
@@ -119,30 +118,101 @@ def dashboard(request):
         messages.info(request, "Task Created")
         
         return redirect('/dashboard/')
-           
-    Live_Task=Task_Table.objects.filter(user=request.user)
-    CompletedTask=Task_Table.objects.filter(user=request.user,IsComplete=1)
-    NoOfPendingTasks=Task_Table.objects.filter(user=request.user,IsComplete=0)
     
-    context={
-        "Page_Title":"ToDo-X",
-        "Page_Heading":"ToDo-X",
-        "Live_Tasks": Live_Task,
-        "NoOfPendingTasks":len(NoOfPendingTasks),
-        "NoOfCompletedTasks": len(CompletedTask),
-        "MissedTasks":11
-    }
     
-    return render(request, "home/dashboard.html",context)
+    else:
+        Live_Task=Task_Table.objects.filter(user=request.user,DeadlineDate__gte=datetime.now())
+        CompletedTask=Task_Table.objects.filter(user=request.user,IsComplete=1)
+        NoOfPendingTasks=Task_Table.objects.filter(user=request.user,IsComplete=0,DeadlineDate__gte=datetime.now())
+        
+        Upcoming_3_Task=Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__gte=datetime.now()).order_by('DeadlineDate')[:3]
+        Missed_Task= Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__lte=datetime.now()).order_by('DeadlineDate')[:3]
+        MissedTaskCount= len(Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__lte=datetime.now()).order_by('DeadlineDate'))
+        
+        print(Upcoming_3_Task)
+        print(Missed_Task)
+        
+        context={
+            "Page_Title":"ToDo-X",
+            "Page_Heading":"ToDo-X",
+            "Live_Tasks": Live_Task,
+            "Upcoming_3_Task":Upcoming_3_Task,
+            "NoOfPendingTasks":len(NoOfPendingTasks),
+            "NoOfCompletedTasks": len(CompletedTask),
+            "Missed_Task":Missed_Task,
+            "MissedTasksCount":len(Missed_Task)
+            
+        }
+        
+        return render(request, "home/dashboard.html",context)
 
 
 
 def task_done(request,id):
     
-    task=Task_Table.objects.filter(id=id).update(IsComplete=True)
+    task=Task_Table.objects.filter(id=id).update(IsComplete=True,ComplateDateTime=datetime.now())
     
     m=f"Task {id} Complete!!"
     
     messages.info(request, m)
     return redirect("/dashboard/")
     
+    
+
+def task_undone(request,id):
+    Task_Table.objects.filter(id=id).update(IsComplete=False,ComplateDateTime=None)
+    task=Task_Table.objects.get(id=id)
+    
+    m=f"Task {task.TaskName} make as Live Task!!"
+    
+    messages.info(request, m)
+    return redirect("/dashboard/")
+
+def delete_task(request,id):
+    task=Task_Table.objects.get(id=id)
+    
+    name=task.TaskName
+    task=Task_Table.objects.filter(id=id).delete()
+    
+    m=f"Task {name} Deteted!!"
+    
+    messages.info(request, m)
+    return redirect("/dashboard/")
+
+def edit_task(request,id):
+    
+    if request.method=='POST':
+        data=request.POST
+        
+        TaskId=(data.get("TaskId"))
+        TaskName=data.get("TaskName")
+        TaskDec=data.get("TaskDec")
+        DeadLine=data.get("DeadLine")
+        DeadTime=data.get("DeadTime")
+        Category=data.get("Category")
+        Priority=data.get("Label")
+        
+        task=Task_Table.objects.get(id=TaskId)
+        
+        task.TaskName=TaskName
+        task.TaskDescription=TaskDec
+        task.TaskCategory=Category
+        task.Label=Priority
+        task.DeadlineDate=DeadLine
+        task.DeadlineTime=DeadTime
+        
+        task.save()
+        
+        messages.info(request, "Task Updated")
+        
+        return redirect("/dashboard")
+    else:
+        task=Task_Table.objects.get(id=id)
+        
+        context={
+            "Page_Title":"ToDo-X",
+            "Page_Heading":"ToDo-X",
+            'task': task
+        }
+        
+        return render (request, 'home/editTask.html',context)

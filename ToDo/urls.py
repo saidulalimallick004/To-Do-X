@@ -37,7 +37,10 @@ urlpatterns = [
     #---------------------------------------------------------------------------------------
     
     path('dashboard/',dashboard,name='Dashboard'),
-    path('completeTask/<id>',task_done, name="DoneTask")
+    path('completeTask/<int:id>',task_done, name="DoneTask"),
+    path('undoTask/<int:id>',task_undone, name="UndoneTask"),
+    path('editTask/<int:id>',edit_task,name='Edit Task'),
+    path('deleteTask/<int:id>',delete_task,name='Delete Task'),
     
     
 ]

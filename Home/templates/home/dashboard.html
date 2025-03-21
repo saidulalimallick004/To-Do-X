@@ -18,7 +18,7 @@
                                         <input type="checkbox" class="form-check-input me-2">
                                         {{forloop.counter}}. {{task.TaskName}}
                                     </button>
-                                <a href="/completeTask/{{task.id}}">Complete</a>
+                                    <a href="/completeTask/{{task.id}}">Complete</a> || <a href="/editTask/{{task.id}}">Edit</a> || <a href="/deleteTask/{{task.id}}">Delete</a>
                                 </li>
                         
                                 <div id="collapse{{task.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{task.id}}" data-bs-parent="#accordionExample">
@@ -126,7 +126,7 @@
                                         <input type="checkbox" value="yes" checked class="form-check-input me-2">
                                         <span class="text-decoration-line-through"> {{forloop.counter}}. {{task.TaskName}}</span>
                                     </button>
-                                        Completed
+                                        <a href="/undoTask/{{task.id}}">NotComplete</a>
                                 </li>
                         
                                 <div id="collapse{{task.id}}" class="accordion-collapse collapse" aria-labelledby="heading{{task.id}}" data-bs-parent="#accordionExample">
@@ -148,9 +148,13 @@
         <div class="col-md-5">
 
             <div class="card shadow-sm p-3 mb-3">
-                <h6>Upcoming Deadlines within 2 Days : Add this Feature Soon </h6>
-                <p class="ml-2"><strong></strong>---<span class="float-end">---</span></p>
-                <p><strong>----</strong> <span class="float-end">---</span></p>
+                <h6>Upcoming Deadlines: </h6>
+                {% for Upcoming_Tasks in Upcoming_3_Task %}
+                
+                    <p><strong>{{Upcoming_Tasks.TaskName}}</strong> <span class="float-end">{{Upcoming_Tasks.DeadlineDate}}</span></p>
+                
+                {% endfor %}
+
             </div>
 
 
@@ -179,15 +183,13 @@
             </div>
 
             <div class="card shadow-sm p-3">
-                <h6><strong>Missed Deadlines:</strong> {{MissedTasks}}</h6>
-                <p>Website Redesign <span class="float-end text-muted">2 days ago</span></p>
-                <small class="text-danger">High Priority</small>
-                <hr>
-                <p>API Documentation <span class="float-end text-muted">1 day ago</span></p>
-                <small class="text-warning">Medium Priority</small>
-                <hr>
-                <p>Budget Report <span class="float-end text-muted">5 hours ago</span></p>
-                <small class="text-danger">High Priority</small>
+                <h6><strong>Missed Deadlines:</strong> {{MissedTasksCount}}</h6>
+                {% for task in Missed_Task %}
+                    <p>{{task.TaskName}} <span class="float-end text-muted">Expired</span></p>
+                    <small class="text-danger">{{task.Label}}</small>
+                    <hr>
+                {% endfor %}
+                
             </div>
         </div>
 
