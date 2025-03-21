@@ -127,7 +127,12 @@ def dashboard(request):
         
         Upcoming_3_Task=Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__gte=datetime.now()).order_by('DeadlineDate')[:3]
         Missed_Task= Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__lte=datetime.now()).order_by('DeadlineDate')[:3]
-        MissedTaskCount= len(Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__lte=datetime.now()).order_by('DeadlineDate'))
+        MissedTaskCount= len(Task_Table.objects.filter(user=request.user,IsComplete=False, DeadlineDate__lte=datetime.now()))
+        
+        Work_Tasks=len(Task_Table.objects.filter(user=request.user, TaskCategory='Work'))
+        Personal_Tasks=len(Task_Table.objects.filter(user=request.user,TaskCategory='Personal' ))
+        Shopping_Tasks=len(Task_Table.objects.filter(user=request.user, TaskCategory='Shopping'))
+        Health_Tasks=len(Task_Table.objects.filter(user=request.user, TaskCategory='Health'))
         
         print(Upcoming_3_Task)
         print(Missed_Task)
@@ -140,7 +145,12 @@ def dashboard(request):
             "NoOfPendingTasks":len(NoOfPendingTasks),
             "NoOfCompletedTasks": len(CompletedTask),
             "Missed_Task":Missed_Task,
-            "MissedTasksCount":len(Missed_Task)
+            "MissedTasksCount":MissedTaskCount,
+            "Work_Tasks": Work_Tasks,
+            "Personal_Tasks": Personal_Tasks,
+            "Health_Tasks":Health_Tasks,
+            "Shopping_Tasks":Shopping_Tasks
+            
             
         }
         
@@ -151,8 +161,8 @@ def dashboard(request):
 def task_done(request,id):
     
     task=Task_Table.objects.filter(id=id).update(IsComplete=True,ComplateDateTime=datetime.now())
-    
-    m=f"Task {id} Complete!!"
+    name=Task_Table.objects.get(id=id).TaskName
+    m=f"Task {name} Complete!!"
     
     messages.info(request, m)
     return redirect("/dashboard/")
